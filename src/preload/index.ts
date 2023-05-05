@@ -18,11 +18,16 @@ if (process.contextIsolated) {
     contextBridge.exposeInMainWorld('store', store)
     contextBridge.exposeInMainWorld('lcu', {
       autoReplay: async function () {
-        const token = getStore('token')
-        const port = getStore('port')
-        const result = await autoReplay({ port, token })
-        console.log('🚀 ~ file: index.ts:24 ~ result:', result)
-        return result
+        console.log('🚀 ~ file: index.ts:23 ~ autoReplay: ~ autoReplay')
+        try {
+          const token = getStore('token')
+          const port = getStore('port')
+          const result = await autoReplay({ port, token })
+          console.log('🚀 ~ file: index.ts:24 ~ result:', result)
+          return result
+        } catch (error) {
+          console.log('🚀 ~ file: index.ts:28 ~ error:', error)
+        }
       }
     })
   } catch (error) {
