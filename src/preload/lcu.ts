@@ -6,7 +6,7 @@ function createClient(config: { port: number; token: string }): AxiosInstance {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      Authorization: window.api.toBufferBase64String(`riot:${config.token}`)
+      Authorization: Buffer.from(`riot:${config.token}`).toString('base64')
     }
   })
 }
