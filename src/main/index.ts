@@ -1,52 +1,34 @@
-import { app, shell, BrowserWindow, globalShortcut } from 'electron'
-import { join } from 'path'
-import { electronApp, optimizer, is } from '@electron-toolkit/utils'
-import icon from '../../resources/icon.png?asset'
-
-let mainWindow
-function createWindow(): void {
-  mainWindow = new BrowserWindow({
-    width: 900,
-    height: 670,
-    show: false,
-    autoHideMenuBar: true,
-    ...(process.platform === 'linux' ? { icon } : {}),
-    webPreferences: {
-      preload: join(__dirname, '../preload/index.js'),
-      sandbox: false
+import { app, BrowserWindow } from 'electron'
+import { createMainWindow } from '@main/createWindow/home'
+import { electronApp, optimizer } from '@electron-toolkit/utils'
+import Store from 'electron-store'
+import { getClientStatus } from '@preload/getClientStatus'
+import { setStore } from './store'
+Store.initRenderer()
+async function init(): Promise<void> {
+  // 从客户端获取状态 并存储到 store
+  const status = await getClientStatus()
+  if (status) {
+    for (const key in status) {
+      if (Object.prototype.hasOwnProperty.call(status, key)) {
+        const element = status[key]
+        setStore(key, element)
+      }
     }
-  })
-
-  mainWindow.on('ready-to-show', () => {
-    mainWindow.webContents.openDevTools()
-    mainWindow.show()
-  })
-
-  mainWindow.webContents.setWindowOpenHandler((details) => {
-    shell.openExternal(details.url)
-    return { action: 'deny' }
-  })
-
-  if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-    mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
-  } else {
-    mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
+  //  创建主窗口
+  const main = await createMainWindow()
 }
-
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
   electronApp.setAppUserModelId('com.electron')
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window)
   })
-  createWindow()
+  await init()
   app.on('activate', function () {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow()
-  })
-  // 添加全局快捷键监听,快捷隐藏/显示窗口
-  globalShortcut.register('CommandOrControl+Alt+I', () => {
-    const is_visible = mainWindow?.isVisible()
-    is_visible ? mainWindow?.hide() : mainWindow?.show()
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createMainWindow()
+    }
   })
 })
 

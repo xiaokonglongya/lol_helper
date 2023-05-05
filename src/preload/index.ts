@@ -1,16 +1,21 @@
 import { contextBridge } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
+import { getStore, store as globalStore } from '../main/store'
 
-// Custom APIs for renderer
-const api = {}
+const api = {
+  toBufferBase64String: function (str: string): string {
+    return Buffer.from(str).toString('base64')
+  }
+}
+const store = {
+  getStore
+}
 
-// Use `contextBridge` APIs to expose Electron APIs to
-// renderer only if context isolation is enabled, otherwise
-// just add to the DOM global.
 if (process.contextIsolated) {
   try {
     contextBridge.exposeInMainWorld('electron', electronAPI)
     contextBridge.exposeInMainWorld('api', api)
+    contextBridge.exposeInMainWorld('store', store)
   } catch (error) {
     console.error(error)
   }
@@ -19,4 +24,6 @@ if (process.contextIsolated) {
   window.electron = electronAPI
   // @ts-ignore (define in dts)
   window.api = api
+  // @ts-ignore (define in dts)
+  window.store = store
 }
