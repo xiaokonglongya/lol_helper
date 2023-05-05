@@ -3,11 +3,17 @@ import Store from 'electron-store'
 interface StoreSchema {
   token: string
   port: number
+  client_info: {
+    token: string
+    port: number
+    pid: number
+  } | null
 }
 export const store = new Store<StoreSchema>({
   defaults: {
     token: '',
-    port: 3000
+    port: 3000,
+    client_info: null
   }
 })
 

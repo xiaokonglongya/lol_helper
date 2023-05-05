@@ -3,18 +3,13 @@ import { createMainWindow } from '@main/createWindow/home'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
 import Store from 'electron-store'
 import { getClientStatus } from '@preload/getClientStatus'
-import { setStore } from './store'
+import { store } from './store'
 Store.initRenderer()
 async function init(): Promise<void> {
   // 从客户端获取状态 并存储到 store
   const status = await getClientStatus()
   if (status) {
-    for (const key in status) {
-      if (Object.prototype.hasOwnProperty.call(status, key)) {
-        const element = status[key]
-        setStore(key, element)
-      }
-    }
+    store.set('client_info', status)
   }
   //  创建主窗口
   const main = await createMainWindow()
