@@ -4,7 +4,7 @@ import { is } from '@electron-toolkit/utils'
 
 export async function createMainWindow(): Promise<BrowserWindow> {
   const main = new BrowserWindow({
-    width: 900,
+    width: 360,
     height: 670,
     show: false,
     autoHideMenuBar: true,

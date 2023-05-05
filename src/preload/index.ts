@@ -1,7 +1,7 @@
 import { contextBridge } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 import { getStore, store as globalStore } from '../main/store'
-import { autoReplay } from './lcu'
+import lcu from './lcu'
 const api = {
   toBufferBase64String: function (str: string): string {
     return Buffer.from(str).toString('base64')
@@ -16,20 +16,7 @@ if (process.contextIsolated) {
     contextBridge.exposeInMainWorld('electron', electronAPI)
     contextBridge.exposeInMainWorld('api', api)
     contextBridge.exposeInMainWorld('store', store)
-    contextBridge.exposeInMainWorld('lcu', {
-      autoReplay: async function () {
-        console.log('🚀 ~ file: index.ts:23 ~ autoReplay: ~ autoReplay')
-        try {
-          const token = getStore('token')
-          const port = getStore('port')
-          const result = await autoReplay({ port, token })
-          console.log('🚀 ~ file: index.ts:24 ~ result:', result)
-          return result
-        } catch (error) {
-          console.log('🚀 ~ file: index.ts:28 ~ error:', error)
-        }
-      }
-    })
+    contextBridge.exposeInMainWorld('lcu', lcu)
   } catch (error) {
     console.error(error)
   }
