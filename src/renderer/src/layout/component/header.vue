@@ -6,10 +6,12 @@
         {{ user_info?.displayName }}
       </span>
     </div>
+    <AutoReplay />
   </div>
 </template>
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import AutoReplay from '../../components/AutoReplay.vue'
 import { CurrentUserInfo } from '@preload/index.d'
 const user_info = ref<CurrentUserInfo>()
 const avatar = ref('')

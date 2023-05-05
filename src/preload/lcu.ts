@@ -11,10 +11,14 @@ export default {
   getAvatar: async function (summonerId: number): Promise<string | undefined> {
     try {
       const result = await getUserAvatar(summonerId)
+      if (!result.ok) return undefined
       return (
         'data:image/png;base64,' +
         btoa(
-          new Uint8Array(result?.data).reduce((data, byte) => data + String.fromCharCode(byte), '')
+          new Uint8Array(result.buffer()).reduce(
+            (data, byte) => data + String.fromCharCode(byte),
+            ''
+          )
         )
       )
     } catch (error) {

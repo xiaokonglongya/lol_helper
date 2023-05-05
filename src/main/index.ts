@@ -5,6 +5,7 @@ import Store from 'electron-store'
 import { getClientStatus } from '@preload/getClientStatus'
 import { getCurrentUserInfo } from '@preload/lcuRequest'
 import { store } from './store'
+import { createLcuWss } from './client/wss'
 Store.initRenderer()
 async function init(): Promise<void> {
   // 从客户端获取状态 并存储到 store
@@ -15,8 +16,9 @@ async function init(): Promise<void> {
   //  创建主窗口
   const main = await createMainWindow()
   const userInfo = await getCurrentUserInfo()
-  if (userInfo?.data) {
-    store.set('user_info', userInfo?.data)
+  if (userInfo?.ok) {
+    const user_info = userInfo?.json()
+    store.set('user_info', user_info)
   }
 }
 app.whenReady().then(async () => {
@@ -25,6 +27,7 @@ app.whenReady().then(async () => {
     optimizer.watchWindowShortcuts(window)
   })
   await init()
+  createLcuWss()
   app.on('activate', function () {
     if (BrowserWindow.getAllWindows().length === 0) {
       createMainWindow()

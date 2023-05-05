@@ -4,16 +4,22 @@ interface StoreSchema {
   token: string
   port: number
   client_info: {
-    token: string
+    password: string
     port: number
     pid: number
-  } | null
+    certificate: string
+  }
 }
 export const store = new Store<StoreSchema>({
   defaults: {
     token: '',
     port: 3000,
-    client_info: null
+    client_info: {
+      password: '',
+      port: 0,
+      pid: 0,
+      certificate: ''
+    }
   }
 })
 
