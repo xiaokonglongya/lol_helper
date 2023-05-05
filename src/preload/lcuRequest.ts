@@ -10,6 +10,7 @@ export function autoReplay(): Promise<Http1Response> {
     {
       method: 'POST',
       url: '/lol-matchmaking/v1/ready-check/accept'
+      //   url: '/lol-matchmaking/v1/ready-check/decline'
     },
     config
   )

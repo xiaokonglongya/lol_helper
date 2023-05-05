@@ -1,9 +1,9 @@
 import { autoReplay, getUserAvatar } from './lcuRequest'
 export default {
-  autoReplay: async function (): Promise<any> {
+  autoReplay: async function (): Promise<void> {
     try {
       const result = await autoReplay()
-      return result
+      if (result.ok) console.log('接受对局成功')
     } catch (error) {
       console.log('🚀 ~ file: index.ts:28 ~ error:', error)
     }

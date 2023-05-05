@@ -1,4 +1,5 @@
 import { LeagueWebSocket, createWebSocketConnection } from 'league-connect'
+import { autoReplay } from '@preload/lcuRequest'
 export async function createLcuWss(): Promise<LeagueWebSocket> {
   const ws = await createWebSocketConnection({
     authenticationOptions: {
@@ -7,10 +8,9 @@ export async function createLcuWss(): Promise<LeagueWebSocket> {
   })
 
   ws.subscribe('/lol-gameflow/v1/gameflow-phase', (data) => {
-    console.log('🚀 ~ file: wss.ts:11 ~ ws.subscribe ~ data:', data)
-
     if (data === 'ReadyCheck') {
       // 自动接收对局
+      autoReplay()
     }
   })
   return ws
