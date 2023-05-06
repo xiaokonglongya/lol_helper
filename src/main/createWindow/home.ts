@@ -10,7 +10,8 @@ export async function createMainWindow(): Promise<BrowserWindow> {
     autoHideMenuBar: true,
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
-      sandbox: false
+      sandbox: false,
+      webSecurity: false
     }
   })
   main.on('ready-to-show', () => {

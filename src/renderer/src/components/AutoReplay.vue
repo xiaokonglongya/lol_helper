@@ -5,7 +5,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 const replay = ref(false)
 const test: () => void = async () => {
   try {

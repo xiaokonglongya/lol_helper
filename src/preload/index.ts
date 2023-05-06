@@ -1,6 +1,6 @@
 import { contextBridge } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
-import { getStore, store as globalStore } from '../main/store'
+import { getStore } from '../main/store'
 import lcu from './lcu'
 const api = {
   toBufferBase64String: function (str: string): string {
