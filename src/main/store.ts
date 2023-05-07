@@ -1,25 +1,23 @@
 import Store from 'electron-store'
 
 interface StoreSchema {
-  token: string
-  port: number
   client_info: {
     password: string
     port: number
     pid: number
     certificate: string
   }
+  replay: boolean
 }
 export const store = new Store<StoreSchema>({
   defaults: {
-    token: '',
-    port: 3000,
     client_info: {
       password: '',
       port: 0,
       pid: 0,
       certificate: ''
-    }
+    },
+    replay: false // 是否自动接受对局
   }
 })
 

@@ -8,7 +8,6 @@ export async function getClientStatus(): Promise<Credentials | null> {
       awaitConnection: true,
       pollInterval: 5000
     })
-    console.log('🚀 ~ file: getClientStatus.ts:36 ~ getClientStatus ~ credentials:', credentials)
     return credentials
   } catch (error) {
     console.log('lol no start')

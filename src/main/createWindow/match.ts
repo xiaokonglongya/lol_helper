@@ -2,15 +2,14 @@ import { BrowserWindow, shell } from 'electron'
 import { join } from 'path'
 import { is } from '@electron-toolkit/utils'
 
-export async function createUnClient(): Promise<BrowserWindow> {
+export async function createMatchWindow(): Promise<BrowserWindow> {
   const main = new BrowserWindow({
-    width: 300,
-    height: 170,
+    title: '历史对局',
+    width: 660,
+    height: 470,
     show: false,
     autoHideMenuBar: true,
     frame: false,
-    backgroundColor: '#f4f4f4',
-    resizable: false,
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false,
@@ -18,7 +17,6 @@ export async function createUnClient(): Promise<BrowserWindow> {
     }
   })
   main.on('ready-to-show', () => {
-    // main.webContents.openDevTools()
     main.show()
   })
 
@@ -28,11 +26,11 @@ export async function createUnClient(): Promise<BrowserWindow> {
   })
 
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-    await main.loadURL(process.env['ELECTRON_RENDERER_URL'] + '/#/un_client')
-    // main.webContents.openDevTools()
+    await main.loadURL(process.env['ELECTRON_RENDERER_URL'] + '/#/match')
+    main.webContents.openDevTools()
   } else {
     await main.loadFile(join(__dirname, '../renderer/index.html'), {
-      hash: 'un_client'
+      hash: 'match'
     })
   }
 

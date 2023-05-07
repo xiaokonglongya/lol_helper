@@ -1,5 +1,31 @@
-import { autoReplay, getUserAvatar } from './lcuRequest'
+import {
+  autoReplay,
+  getUserAvatar,
+  getUserRankInfo,
+  getSummerMatch,
+  getSummerHonorLevel
+} from './lcuRequest'
+import { store } from '@main/store'
+import { SummerMatch, SummerHonorLevel } from './index.d'
 export default {
+  setReplay: function (value: boolean): boolean {
+    try {
+      store.set('replay', value)
+      console.log('🚀 ~ file: lcu.ts:8 ~ value:', value)
+      return true
+    } catch (error) {
+      console.log('🚀 ~ file: index.ts:28 ~ error:', error)
+      return false
+    }
+  },
+  getReplay: function (): boolean {
+    try {
+      return store.get('replay')
+    } catch (error) {
+      console.log('🚀 ~ file: index.ts:28 ~ error:', error)
+      return false
+    }
+  },
   autoReplay: async function (): Promise<void> {
     try {
       const result = await autoReplay()
@@ -24,6 +50,46 @@ export default {
     } catch (error) {
       console.log('获取头像失败')
       return undefined
+    }
+  },
+  getRankInfo: async function (): Promise<any> {
+    try {
+      const result = await getUserRankInfo()
+      if (result.ok) {
+        return result.json()
+      } else {
+        throw Error()
+      }
+    } catch (error) {
+      console.log('获取rank信息失败')
+    }
+  },
+  getSummonerMatchHistory: async function (puuid: number): Promise<SummerMatch | void> {
+    try {
+      const result = await getSummerMatch(puuid)
+      if (result.ok) {
+        return result.json()
+      } else {
+        throw Error()
+      }
+    } catch (error) {
+      console.log('获取对局信息失败')
+    }
+  },
+  /**
+   * 获取荣誉等级
+   * @returns
+   */
+  getSummerHonorLevel: async function (): Promise<SummerHonorLevel | void> {
+    try {
+      const result = await getSummerHonorLevel()
+      if (result.ok) {
+        return result.json()
+      } else {
+        throw Error()
+      }
+    } catch (error) {
+      console.log('获取对局信息失败')
     }
   }
 }

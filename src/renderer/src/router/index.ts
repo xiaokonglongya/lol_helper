@@ -1,7 +1,8 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import unCLient from '@renderer/src/views/unclient/index.vue'
-import Home from '@renderer/src/layout/index.vue'
+import Home from '@renderer/src/views/home/index.vue'
 import Timer from '@renderer/src/views/timer/index.vue'
+import Match from '@renderer/src/views/match/index.vue'
 export default createRouter({
   history: createWebHashHistory(),
   routes: [
@@ -16,6 +17,10 @@ export default createRouter({
     {
       path: '/timer',
       component: Timer
+    },
+    {
+      path: '/match',
+      component: Match
     }
   ]
 })

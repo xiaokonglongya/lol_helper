@@ -15,6 +15,21 @@ export function autoReplay(): Promise<Http1Response> {
     config
   )
 }
+/**
+ * 获取当前大厅信息
+ * @returns
+ * @description
+ */
+export async function getLobby(): Promise<Http1Response> {
+  const credentials = store.get('client_info')
+  return createHttp1Request(
+    {
+      method: 'GET',
+      url: '/lol-gameflow/v1/gameflow-phase'
+    },
+    credentials
+  )
+}
 
 /**
  * 获取当前客户端用户信息
@@ -40,6 +55,48 @@ export function getUserAvatar(profileIconId: number): Promise<Http1Response> {
     {
       method: 'GET',
       url: `/lol-game-data/assets/v1/profile-icons/${profileIconId}.jpg`
+    },
+    store.get('client_info')
+  )
+}
+
+/**
+ * 获取当前角色对局信息
+ * @returns
+ */
+export function getUserRankInfo(): Promise<Http1Response> {
+  return createHttp1Request(
+    {
+      method: 'GET',
+      url: '/lol-ranked/v1/current-ranked-stats'
+    },
+    store.get('client_info')
+  )
+}
+
+/**
+ *  获取当前角色对局信息
+ * @param puuid 玩家唯一标识符
+ * @returns
+ */
+export function getSummerMatch(puuid: number): Promise<Http1Response> {
+  return createHttp1Request(
+    {
+      method: 'GET',
+      url: `/lol-match-history/v1/products/lol/${puuid}/matches`
+    },
+    store.get('client_info')
+  )
+}
+/**
+ * 获取当前角色荣誉等级
+ * @returns
+ */
+export function getSummerHonorLevel(): Promise<Http1Response> {
+  return createHttp1Request(
+    {
+      method: 'GET',
+      url: `/lol-honor-v2/v1/profile`
     },
     store.get('client_info')
   )
