@@ -54,6 +54,16 @@ onMounted(() => {
 
 const tabs = ref([
   {
+    title: '匹配对局',
+    key: 'RANKED_TFT_PAIRS',
+    gameInfo: {
+      win: 0,
+      lose: 0,
+      winRate: '',
+      level: ''
+    }
+  },
+  {
     title: '单双排位',
     key: 'RANKED_SOLO_5x5',
     gameInfo: {
@@ -85,8 +95,14 @@ const tabs = ref([
   }
 ])
 const formatData = (data): void => {
+  console.log(data)
+  console.log(
+    '🚀 ~ file: rank.vue:88 ~ formatData ~ data:',
+    data.map((e) => e.queueType)
+  )
   tabs.value.forEach((item) => {
     const _item = data.find((i) => i.queueType === item.key)
+
     if (_item) {
       const win = _item?.wins
       const lose = _item?.losses

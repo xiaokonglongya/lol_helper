@@ -1,3 +1,4 @@
+import { getCurrentUserInfo } from '@preload/lcuRequest'
 import {
   autoReplay,
   getUserAvatar,
@@ -8,6 +9,20 @@ import {
 import { store } from '@main/store'
 import { SummerMatch, SummerHonorLevel } from './index.d'
 export default {
+  getCurrentUserInfo: async function (): Promise<any> {
+    try {
+      const result = await getCurrentUserInfo()
+      if (result.ok) {
+        const data = await result.json()
+        return data
+      }
+      return undefined
+    } catch (error) {
+      console.log('🚀 ~ file: lcu.ts:8 ~ error:', error)
+      return undefined
+    }
+  },
+
   setReplay: function (value: boolean): boolean {
     try {
       store.set('replay', value)

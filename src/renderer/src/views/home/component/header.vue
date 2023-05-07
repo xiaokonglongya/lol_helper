@@ -69,8 +69,8 @@ onMounted(() => {
   getHeaderData()
 })
 
-const getHeaderData = (): void => {
-  const userInfo = window.store.getStore<CurrentUserInfo>('user_info')
+const getHeaderData = async (): Promise<void> => {
+  const userInfo = await window.lcu.getCurrentUserInfo()
   if (userInfo) {
     user_info.value = userInfo
     getAvatar()

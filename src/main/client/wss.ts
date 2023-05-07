@@ -24,6 +24,7 @@ export async function createLcuWss(): Promise<LeagueWebSocket | undefined> {
         ipcMain.emit('endOfGame')
       }
     })
+
     return ws
   } catch (error) {
     console.log(error)
