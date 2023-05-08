@@ -22,3 +22,25 @@ export const formatLevel: (tier: string) => string = (tier) => {
       return '未定级'
   }
 }
+
+/**
+ * 转换游戏模式
+ * @param gameMode
+ * @returns
+ */
+export const formatGameModel = (
+  queueId: number
+): '排位赛 单排/双排' | '匹配模式' | '排位赛 灵活排位' | '极地大乱斗' | '其他模式' => {
+  switch (queueId) {
+    case 420:
+      return '排位赛 单排/双排'
+    case 430:
+      return '匹配模式'
+    case 440:
+      return '排位赛 灵活排位'
+    case 450:
+      return '极地大乱斗'
+    default:
+      return '其他模式'
+  }
+}

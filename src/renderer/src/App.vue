@@ -9,6 +9,6 @@ import { NMessageProvider } from 'naive-ui'
 
 <style lang="less">
 #app {
-  font-family: 'use-font';
+  //   font-family: 'use-font';
 }
 </style>

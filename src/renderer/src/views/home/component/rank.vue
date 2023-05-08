@@ -2,6 +2,9 @@
   <div class="rank">
     <n-card style="border-radius: 12px" :hoverable="true" content-style="padding:10px ">
       <n-tabs size="small" type="segment">
+        <n-tab-pane name="近20场">
+          <Summer />
+        </n-tab-pane>
         <n-tab-pane v-for="item in tabs" :key="item.key" :name="item.title" :tab="item.title">
           <div class="rank-item">
             <div class="win">
@@ -48,21 +51,22 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { formatLevel } from '@renderer/src/utils/format'
+import Summer from './summer.vue'
 onMounted(() => {
   getRank()
 })
 
 const tabs = ref([
-  {
-    title: '匹配对局',
-    key: 'RANKED_TFT_PAIRS',
-    gameInfo: {
-      win: 0,
-      lose: 0,
-      winRate: '',
-      level: ''
-    }
-  },
+  //   {
+  //     title: '匹配对局',
+  //     key: 'RANKED_TFT_PAIRS',
+  //     gameInfo: {
+  //       win: 0,
+  //       lose: 0,
+  //       winRate: '',
+  //       level: ''
+  //     }
+  //   },
   {
     title: '单双排位',
     key: 'RANKED_SOLO_5x5',

@@ -79,15 +79,22 @@ export default {
       console.log('获取rank信息失败')
     }
   },
-  getSummonerMatchHistory: async function (puuid: number): Promise<SummerMatch | void> {
+  getSummonerMatchHistory: async function (
+    puuid: string,
+    query?: {
+      begIndex: number
+      endIndex: number
+    }
+  ): Promise<SummerMatch | void> {
     try {
-      const result = await getSummerMatch(puuid)
+      const result = await getSummerMatch(puuid, query)
       if (result.ok) {
         return result.json()
       } else {
         throw Error()
       }
     } catch (error) {
+      console.log('🚀 ~ file: lcu.ts:97 ~ error:', error)
       console.log('获取对局信息失败')
     }
   },

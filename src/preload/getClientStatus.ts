@@ -10,6 +10,7 @@ export async function getClientStatus(): Promise<Credentials | null> {
     })
     return credentials
   } catch (error) {
+    console.log('🚀 ~ file: getClientStatus.ts:13 ~ getClientStatus ~ error:', error)
     console.log('lol no start')
     return null
   }

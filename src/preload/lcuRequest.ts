@@ -79,11 +79,14 @@ export function getUserRankInfo(): Promise<Http1Response> {
  * @param puuid 玩家唯一标识符
  * @returns
  */
-export function getSummerMatch(puuid: number): Promise<Http1Response> {
+export function getSummerMatch(
+  puuid: string,
+  query?: { begIndex: number; endIndex: number }
+): Promise<Http1Response> {
   return createHttp1Request(
     {
       method: 'GET',
-      url: `/lol-match-history/v1/products/lol/${puuid}/matches`
+      url: `/lol-match-history/v1/products/lol/${puuid}/matches?begIndex=${query?.begIndex}&endIndex=${query?.endIndex}`
     },
     store.get('client_info')
   )
