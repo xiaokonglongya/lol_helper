@@ -2,7 +2,15 @@
   <div class="match">
     <div class="match-list">
       <n-scrollbar height="500px">
-        <div v-for="item in match_list" :key="item.matchTime" class="match-list-item">
+        <div
+          v-for="item in match_list"
+          :key="item.matchTime"
+          class="match-list-item"
+          :class="{
+            current: current_match?.game_id == item.game_id
+          }"
+          @click="setCurrentMatch(item)"
+        >
           <div class="avatar">
             <n-avatar :size="44" :src="item.hero_avatar" />
           </div>
@@ -16,30 +24,38 @@
               </n-tag>
             </n-space>
             <div style="height: 4px"></div>
-            <n-space>
+            <n-space align="end" justify="space-between">
               <div class="score">
                 <n-tag :bordered="false" size="small" :type="item.is_win ? 'success' : 'error'">
                   {{ item.kills }}/{{ item.deaths }}/{{ item.assists }}
                 </n-tag>
+              </div>
+
+              <div class="summon">
+                <img :src="item.summon_1" />
+                <img :src="item.summon_2" />
               </div>
             </n-space>
           </div>
         </div>
       </n-scrollbar>
     </div>
+    <div class="details">
+      <Dateils :game-id="current_match?.game_id" />
+    </div>
   </div>
 </template>
 <script setup lang="ts">
 import { ref } from 'vue'
 import { CurrentUserInfo, SummerMatch } from '@preload/index.d'
-import { opggStore } from '@renderer/src/store'
+import { riotSotre } from '@renderer/src/store'
 import { formatGameModel } from '@renderer/src/utils/format'
 import { mathKDA } from '@renderer/src/utils/math'
+import Dateils from './detaile.vue'
 import dayjs from 'dayjs'
 const user_info = window.store.getStore('user_info') as CurrentUserInfo
 const summer_info = ref<SummerMatch>()
-const opgg_store = opggStore()
-
+const riot_sotre = riotSotre()
 const close = (): void => {
   window.page.closeMatchWindow()
 }
@@ -52,20 +68,27 @@ interface MatchList {
   assists: number
   matchTime: string
   kda: string
+  summon_1?: string
+  summon_2?: string
+  game_id: number
 }
+const current_match = ref<MatchList>()
 const match_list = ref<MatchList[]>([])
 const formatData = (data: SummerMatch['games']['games']): MatchList[] => {
   console.log(data)
   return data?.map((game) => {
     const item = {
-      hero_avatar: opgg_store.getHeroAvatar(game.participants[0].championId),
+      hero_avatar: riot_sotre.getHeroAvatar(game.participants[0].championId),
       game_type: formatGameModel(game.queueId),
       is_win: game.participants[0].stats.win,
       kills: game.participants[0].stats.kills, // 击杀
       deaths: game.participants[0].stats.deaths, // 死亡
       assists: game.participants[0].stats.assists, // 助攻
       matchTime: dayjs(game.gameCreation).format('MM-DD'), // 对局时长
-      kda: ''
+      kda: '',
+      summon_1: riot_sotre.getSummonerIcon(game.participants[0].spell1Id)?.icon_src,
+      summon_2: riot_sotre.getSummonerIcon(game.participants[0].spell2Id)?.icon_src,
+      game_id: game.gameId
     }
     item['kda'] = mathKDA(item.kills, item.deaths, item.assists)
     return item
@@ -73,34 +96,50 @@ const formatData = (data: SummerMatch['games']['games']): MatchList[] => {
 }
 
 const getSummer = async (): Promise<void> => {
-  opgg_store.heros.length == 0 && (await opgg_store.getHeros())
+  riot_sotre.heros.length == 0 && (await riot_sotre.initRiotData())
   try {
-    console.log(user_info)
     const result = (await window.lcu.getSummonerMatchHistory(user_info.puuid, {
       begIndex: 0,
       endIndex: 10
     })) as SummerMatch
     summer_info.value = result
     match_list.value = formatData(result.games.games)
+    current_match.value = match_list.value[0]
   } catch (error) {
     console.log('🚀 ~ file: index.vue:25 ~ getSummer ~ error:', error)
   }
 }
 getSummer()
+
+const setCurrentMatch = (item: MatchList): void => {
+  current_match.value = item
+}
 </script>
 <style scoped lang="less">
-.title {
-  -webkit-app-region: drag;
-  -webkit-user-select: none;
+// .title {
+//   -webkit-app-region: drag;
+//   -webkit-user-select: none;
+// }
+.match {
+  display: flex;
+  height: 500px;
+  .match-list {
+  }
+  .details {
+    flex: 1;
+  }
 }
 .match-list-item {
-  //   background-color: blue;
-  padding: 8px 0;
+  padding: 8px 6px 8px 16px;
   width: 190px;
   display: flex;
   align-items: center;
-  margin: 0px 13px;
   border-bottom: 1px solid #eee;
+
+  cursor: pointer;
+  &.current {
+    background-color: #eee;
+  }
   &:last-child {
     border-bottom: none;
   }
@@ -115,6 +154,8 @@ getSummer()
     justify-content: space-between;
 
     .score {
+      display: flex;
+      justify-content: space-between;
       ::v-deep(.n-tag) {
         width: 60px;
         align-items: center;
@@ -129,6 +170,15 @@ getSummer()
         align-items: center;
         justify-content: center;
         font-weight: bold;
+      }
+    }
+    .summon {
+      display: flex;
+      justify-content: space-between;
+      img {
+        margin-left: 4px;
+        width: 18px;
+        border-radius: 2px;
       }
     }
   }

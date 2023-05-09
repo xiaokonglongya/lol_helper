@@ -5,8 +5,8 @@ import { is } from '@electron-toolkit/utils'
 export async function createMatchWindow(): Promise<BrowserWindow> {
   const main = new BrowserWindow({
     title: '历史对局',
-    width: 660,
-    height: 470,
+    width: 860,
+    height: 570,
     show: false,
     autoHideMenuBar: true,
     frame: false,
