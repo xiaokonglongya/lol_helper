@@ -1,4 +1,4 @@
-import { getCurrentUserInfo } from '@preload/lcuRequest'
+import { getCurrentUserInfo, getSummerMatchDetails } from '@preload/lcuRequest'
 import {
   autoReplay,
   getUserAvatar,
@@ -79,6 +79,12 @@ export default {
       console.log('获取rank信息失败')
     }
   },
+  /**
+   * 获取对局信息
+   * @param puuid  用户id
+   * @param query
+   * @returns
+   */
   getSummonerMatchHistory: async function (
     puuid: string,
     query?: {
@@ -98,6 +104,18 @@ export default {
       console.log('获取对局信息失败')
     }
   },
+  getMatchDateilsByGameId: async function (gameId: number): Promise<any> {
+    try {
+      const result = await getSummerMatchDetails(gameId)
+      if (result.ok) {
+        return result.json()
+      }
+    } catch (error) {
+      console.log('🚀 ~ file: lcu.ts:97 ~ error:', error)
+      console.log('获取对局信息失败')
+    }
+  },
+
   /**
    * 获取荣誉等级
    * @returns

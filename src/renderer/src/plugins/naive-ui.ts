@@ -16,7 +16,9 @@ import {
   NTabs,
   NTabPane,
   NGradientText,
-  NScrollbar
+  NScrollbar,
+  NPagination,
+  NSpin
 } from 'naive-ui'
 export function injectNaiveui(App: App<Element>): App<Element> {
   const naive = create({
@@ -36,7 +38,9 @@ export function injectNaiveui(App: App<Element>): App<Element> {
       NTabs,
       NTabPane,
       NGradientText,
-      NScrollbar
+      NScrollbar,
+      NPagination,
+      NSpin
     ]
   })
   return App.use(naive)

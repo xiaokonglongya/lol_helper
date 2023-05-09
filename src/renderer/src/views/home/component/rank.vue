@@ -2,9 +2,9 @@
   <div class="rank">
     <n-card style="border-radius: 12px" :hoverable="true" content-style="padding:10px ">
       <n-tabs size="small" type="segment">
-        <n-tab-pane name="近20场">
+        <!-- <n-tab-pane name="近20场">
           <Summer />
-        </n-tab-pane>
+        </n-tab-pane> -->
         <n-tab-pane v-for="item in tabs" :key="item.key" :name="item.title" :tab="item.title">
           <div class="rank-item">
             <div class="win">

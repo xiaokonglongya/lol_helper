@@ -9,6 +9,7 @@ export async function createMatchWindow(): Promise<BrowserWindow> {
     height: 570,
     show: false,
     autoHideMenuBar: true,
+    resizable: false,
     frame: false,
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),

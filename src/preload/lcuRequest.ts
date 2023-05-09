@@ -92,6 +92,20 @@ export function getSummerMatch(
   )
 }
 /**
+ * 获取游戏详情
+ * @param matchId
+ * @returns
+ */
+export function getSummerMatchDetails(matchId: number): Promise<Http1Response> {
+  return createHttp1Request(
+    {
+      method: 'GET',
+      url: `/lol-match-history/v1/games/${matchId}`
+    },
+    store.get('client_info')
+  )
+}
+/**
  * 获取当前角色荣誉等级
  * @returns
  */

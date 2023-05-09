@@ -1,45 +1,56 @@
 <template>
   <div class="match">
-    <div class="match-list">
-      <n-scrollbar height="500px">
-        <div
-          v-for="item in match_list"
-          :key="item.matchTime"
-          class="match-list-item"
-          :class="{
-            current: current_match?.game_id == item.game_id
-          }"
-          @click="setCurrentMatch(item)"
-        >
-          <div class="avatar">
-            <n-avatar :size="44" :src="item.hero_avatar" />
-          </div>
-          <div class="info">
-            <n-space>
-              <div class="title">
-                {{ item.game_type }}
-              </div>
-              <n-tag :bordered="false" size="small">
-                {{ item.matchTime }}
-              </n-tag>
-            </n-space>
-            <div style="height: 4px"></div>
-            <n-space align="end" justify="space-between">
-              <div class="score">
-                <n-tag :bordered="false" size="small" :type="item.is_win ? 'success' : 'error'">
-                  {{ item.kills }}/{{ item.deaths }}/{{ item.assists }}
-                </n-tag>
-              </div>
-
-              <div class="summon">
-                <img :src="item.summon_1" />
-                <img :src="item.summon_2" />
-              </div>
-            </n-space>
-          </div>
-        </div>
-      </n-scrollbar>
+    <div class="header">
+      <div class="header-title">历史对局</div>
+      <div class="right">
+        <n-pagination v-model:page="page" size="small" :page-count="10" @update-page="hadnlePage" />
+        <n-icon size="24" @click="close">
+          <CloseCircleOutline />
+        </n-icon>
+      </div>
     </div>
+    <n-spin :show="loading">
+      <div class="match-list">
+        <n-scrollbar height="500px">
+          <div
+            v-for="item in match_list"
+            :key="item.game_id"
+            class="match-list-item"
+            :class="{
+              current: current_match?.game_id == item.game_id
+            }"
+            @click="setCurrentMatch(item)"
+          >
+            <div class="avatar">
+              <n-avatar :size="44" :src="item.hero_avatar" />
+            </div>
+            <div class="info">
+              <n-space>
+                <div class="title">
+                  {{ item.game_type }}
+                </div>
+                <n-tag :bordered="false" size="small">
+                  {{ item.matchTime }}
+                </n-tag>
+              </n-space>
+              <div style="height: 4px"></div>
+              <n-space align="end" justify="space-between">
+                <div class="score">
+                  <n-tag :bordered="false" size="small" :type="item.is_win ? 'success' : 'error'">
+                    {{ item.kills }}/{{ item.deaths }}/{{ item.assists }}
+                  </n-tag>
+                </div>
+
+                <div class="summon">
+                  <img :src="item.summon_1" />
+                  <img :src="item.summon_2" />
+                </div>
+              </n-space>
+            </div>
+          </div>
+        </n-scrollbar>
+      </div>
+    </n-spin>
     <div class="details">
       <Dateils :game-id="current_match?.game_id" />
     </div>
@@ -47,6 +58,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue'
+import { CloseCircleOutline } from '@vicons/ionicons5'
 import { CurrentUserInfo, SummerMatch } from '@preload/index.d'
 import { riotSotre } from '@renderer/src/store'
 import { formatGameModel } from '@renderer/src/utils/format'
@@ -56,6 +68,8 @@ import dayjs from 'dayjs'
 const user_info = window.store.getStore('user_info') as CurrentUserInfo
 const summer_info = ref<SummerMatch>()
 const riot_sotre = riotSotre()
+const page = ref<number>(1)
+const loading = ref<boolean>(false)
 const close = (): void => {
   window.page.closeMatchWindow()
 }
@@ -98,36 +112,66 @@ const formatData = (data: SummerMatch['games']['games']): MatchList[] => {
 const getSummer = async (): Promise<void> => {
   riot_sotre.heros.length == 0 && (await riot_sotre.initRiotData())
   try {
+    loading.value = true
+    const begIndex = (page.value - 1) * 9
+    const endIndex = page.value * 9
     const result = (await window.lcu.getSummonerMatchHistory(user_info.puuid, {
-      begIndex: 0,
-      endIndex: 10
+      begIndex,
+      endIndex
     })) as SummerMatch
     summer_info.value = result
     match_list.value = formatData(result.games.games)
     current_match.value = match_list.value[0]
   } catch (error) {
     console.log('🚀 ~ file: index.vue:25 ~ getSummer ~ error:', error)
+  } finally {
+    loading.value = false
   }
 }
 getSummer()
 
+const hadnlePage = (): void => {
+  getSummer()
+}
 const setCurrentMatch = (item: MatchList): void => {
   current_match.value = item
 }
 </script>
 <style scoped lang="less">
-// .title {
-//   -webkit-app-region: drag;
-//   -webkit-user-select: none;
-// }
 .match {
   display: flex;
   height: 500px;
-  .match-list {
+  position: relative;
+  padding-top: 50px;
+  .header {
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
+    .header-title {
+      flex: 1;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      -webkit-app-region: drag;
+      -webkit-user-select: none;
+    }
+    .right {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
   }
   .details {
     flex: 1;
   }
+}
+.match-list {
+  height: 500px;
 }
 .match-list-item {
   padding: 8px 6px 8px 16px;
