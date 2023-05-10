@@ -1,13 +1,15 @@
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, ipcMain } from 'electron'
 import { createMainWindow } from '@main/createWindow/home'
 import { createUnClient } from '@main/createWindow/unclient'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
 import Store from 'electron-store'
 import { getClientStatus } from '@preload/getClientStatus'
 import { getCurrentUserInfo } from '@preload/lcuRequest'
+import lcu from '@preload/lcu'
 import { store } from './store'
 import { createLcuWss } from './client/wss'
 import { eventManager } from '@main/events/index'
+import { runExe } from './client/runExe'
 Store.initRenderer()
 
 async function loopUpdate(): Promise<void> {
@@ -35,9 +37,25 @@ async function loopUpdate(): Promise<void> {
   }
 }
 async function init(): Promise<void> {
+  ipcMain.on('runExe', (_, ext_path: string, exe_name: string) => {
+    runExe(ext_path, exe_name)
+  })
+
   console.log('启动')
   const unClient = await createUnClient()
-
+  ipcMain.on('client-start', () => {
+    unClient.webContents.send('client-start')
+  })
+  ipcMain.on('client-end', () => {
+    unClient.webContents.send('client-end')
+  })
+  ipcMain.on('client-error', () => {
+    unClient.webContents.send('client-error')
+  })
+  ipcMain.on('quit-client-wait', (_) => {
+    unClient.destroy()
+    app.quit()
+  })
   // 从客户端获取状态 并存储到 store
   const status = await getClientStatus()
   //   createTimerWindow()
@@ -45,6 +63,7 @@ async function init(): Promise<void> {
     store.set('client_info', status)
     unClient.hide()
     await loopUpdate()
+    lcu.updateClientInstallPath()
   }
 }
 app.whenReady().then(async () => {

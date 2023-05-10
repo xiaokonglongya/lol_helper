@@ -4,7 +4,7 @@ import { is } from '@electron-toolkit/utils'
 
 export async function createUnClient(): Promise<BrowserWindow> {
   const main = new BrowserWindow({
-    width: 300,
+    width: 400,
     height: 170,
     show: false,
     autoHideMenuBar: true,
@@ -18,7 +18,6 @@ export async function createUnClient(): Promise<BrowserWindow> {
     }
   })
   main.on('ready-to-show', () => {
-    // main.webContents.openDevTools()
     main.show()
   })
 
@@ -29,7 +28,7 @@ export async function createUnClient(): Promise<BrowserWindow> {
 
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
     await main.loadURL(process.env['ELECTRON_RENDERER_URL'] + '/#/un_client')
-    // main.webContents.openDevTools()
+    main.webContents.openDevTools()
   } else {
     await main.loadFile(join(__dirname, '../renderer/index.html'), {
       hash: 'un_client'

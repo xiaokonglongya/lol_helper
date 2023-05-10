@@ -1,6 +1,20 @@
 import { store } from '@main/store'
 import { createHttp1Request, Http1Response } from 'league-connect'
 /**
+ * 获取客户端安装目录
+ * @returns
+ */
+export function getClientInstallDir(): Promise<Http1Response> {
+  return createHttp1Request(
+    {
+      method: 'GET',
+      url: '/data-store/v1/install-dir'
+    },
+    store.get('client_info')
+  )
+}
+
+/**
  * 自动接收匹配对局
  * @returns
  */

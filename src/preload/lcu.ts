@@ -4,11 +4,25 @@ import {
   getUserAvatar,
   getUserRankInfo,
   getSummerMatch,
-  getSummerHonorLevel
+  getSummerHonorLevel,
+  getClientInstallDir
 } from './lcuRequest'
 import { store } from '@main/store'
 import { SummerMatch, SummerHonorLevel } from './index.d'
 export default {
+  updateClientInstallPath: async function (): Promise<void> {
+    try {
+      const result = await getClientInstallDir()
+      if (result.ok) {
+        const dir = result.json()
+        console.log(dir, '安装目录')
+        store.set('client_install_path', dir)
+      }
+      //   store.set('client_install_path', )
+    } catch (error) {
+      console.log('🚀 ~ file: lcu.ts:8 ~ error:', error)
+    }
+  },
   getCurrentUserInfo: async function (): Promise<any> {
     try {
       const result = await getCurrentUserInfo()

@@ -8,6 +8,7 @@ interface StoreSchema {
     certificate: string
   }
   replay: boolean
+  client_install_path: string
 }
 export const store = new Store<StoreSchema>({
   defaults: {
@@ -17,7 +18,8 @@ export const store = new Store<StoreSchema>({
       pid: 0,
       certificate: ''
     },
-    replay: false // 是否自动接受对局
+    replay: false, // 是否自动接受对局
+    client_install_path: '' // 客户端安装目录
   }
 })
 
