@@ -51,7 +51,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { formatLevel } from '@renderer/src/utils/format'
-import Summer from './summer.vue'
+// import Summer from './summer.vue'
 onMounted(() => {
   getRank()
 })

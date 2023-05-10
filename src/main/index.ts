@@ -10,8 +10,8 @@ import { store } from './store'
 import { createLcuWss } from './client/wss'
 import { eventManager } from '@main/events/index'
 import { runExe } from './client/runExe'
-Store.initRenderer()
 
+Store.initRenderer()
 async function loopUpdate(): Promise<void> {
   console.log('执行循环更新用户信息')
   try {
