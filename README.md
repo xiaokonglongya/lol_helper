@@ -1,34 +1,8 @@
 # lol_helper
 
-An Electron application with Vue and TypeScript
+一个正在逐渐完善的英雄联盟的助手
 
-## Recommended IDE Setup
+## 开发计划
 
-- [VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
-
-## Project Setup
-
-### Install
-
-```bash
-$ npm install
-```
-
-### Development
-
-```bash
-$ npm run dev
-```
-
-### Build
-
-```bash
-# For windows
-$ npm run build:win
-
-# For macOS
-$ npm run build:mac
-
-# For Linux
-$ npm run build:linux
-```
+- [x] 段位查询
+- [x] 秒接对局
