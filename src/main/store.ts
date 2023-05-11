@@ -1,12 +1,14 @@
+import { CurrentUserInfo } from '@preload/index.d'
 import Store from 'electron-store'
 
-interface StoreSchema {
+export type StoreSchema = {
   client_info: {
     password: string
     port: number
     pid: number
     certificate: string
   }
+  user_info: CurrentUserInfo | null
   replay: boolean
   client_install_path: string
 }
@@ -18,6 +20,7 @@ export const store = new Store<StoreSchema>({
       pid: 0,
       certificate: ''
     },
+    user_info: null,
     replay: false, // 是否自动接受对局
     client_install_path: '' // 客户端安装目录
   }

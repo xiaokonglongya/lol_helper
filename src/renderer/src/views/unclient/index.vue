@@ -52,8 +52,8 @@ import { ref } from 'vue'
 import { CloseCircleOutline } from '@vicons/ionicons5'
 import { useMessage } from 'naive-ui'
 const message = useMessage()
-// const client_path = ref<string>(window.store.getStore('client_install_path') || '')
-const client_path = ref<string>('')
+const client_path = ref<string>(window.store.getStore('client_install_path') || '')
+// const client_path = ref<string>('')
 
 const startStatus = ref<'start' | 'end' | 'error' | 'wait'>('wait')
 
@@ -82,23 +82,10 @@ const close = (): void => {
   window.electron.ipcRenderer.send('quit-client-wait')
 }
 </script>
-<style lang="less">
+<style lang="less" scoped>
 @import url('spinkit/spinkit.css');
 body {
   margin: 0;
-}
-.header {
-  display: flex;
-  justify-content: flex-end;
-  width: 100%;
-  padding: 3px;
-  box-sizing: border-box;
-  .title {
-    height: 20px;
-    flex: 1;
-    -webkit-app-region: drag;
-    -webkit-user-select: none;
-  }
 }
 .unline {
   width: 400px;
@@ -106,5 +93,18 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  .header {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    padding: 3px;
+    box-sizing: border-box;
+    .title {
+      height: 20px;
+      flex: 1;
+      -webkit-app-region: drag;
+      -webkit-user-select: none;
+    }
+  }
 }
 </style>

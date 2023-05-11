@@ -21,6 +21,9 @@
             }"
             @click="setCurrentMatch(item)"
           >
+            <div class="affix" :class="item.is_win ? 'win' : 'fail'">
+              {{ item.is_win ? '胜利' : '失败' }}
+            </div>
             <div class="avatar">
               <n-avatar :size="44" :src="item.hero_avatar" />
             </div>
@@ -171,16 +174,38 @@ const setCurrentMatch = (item: MatchList): void => {
   }
 }
 .match-list {
-  height: 500px;
+  height: 600px;
 }
 .match-list-item {
   padding: 8px 6px 8px 16px;
-  width: 190px;
+  width: 220px;
   display: flex;
   align-items: center;
   border-bottom: 1px solid #eee;
-
   cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  .affix {
+    position: absolute;
+    z-index: 99;
+    left: 5px;
+    top: 10px;
+    padding: 2px 0;
+    transform: rotate(-45deg);
+    background-color: red;
+    width: 30px;
+    text-align: center;
+    font-size: 8px;
+    color: #fff;
+    border-radius: 3px;
+    &.win {
+      background-color: #5383e8;
+    }
+    &.fail {
+      background-color: #e84057;
+    }
+  }
+
   &.current {
     background-color: #eee;
   }

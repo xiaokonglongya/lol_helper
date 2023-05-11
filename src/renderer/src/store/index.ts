@@ -31,7 +31,7 @@ interface Summoner {
   icon_src?: string
 }
 
-interface Equipment {
+export interface Equipment {
   name: string
 
   plaintext: string
@@ -54,6 +54,7 @@ interface Equipment {
   stats: {
     FlatMovementSpeedMod: number
   }
+  description: string
 }
 
 const version = '13.9.1'
@@ -80,6 +81,7 @@ export const riotSotre = defineStore('opgg-stroe', () => {
       `https://ddragon.leagueoflegends.com/cdn/${version}/data/${language}/item.json`
     )
     equipments.value = result?.data?.data || {}
+    console.log('🚀 ~ file: index.ts:84 ~ getEquipments ~   equipments.value:', equipments.value)
   }
 
   const initRiotData = async (): Promise<void> => {

@@ -1,12 +1,14 @@
 import { ElectronAPI } from '@electron-toolkit/preload'
+import { StoreSchema } from '@main/store'
 declare global {
+  import('@main/store').StoreSchema
   interface Window {
     electron: ElectronAPI
     api: {
       toBufferBase64String: (str: string) => string
     }
     store: {
-      getStore: <T>(key: string) => T
+      getStore: <Key extends keyof StoreSchema>(key: Key) => StoreSchema[Key]
     }
     lcu: typeof import('./lcu').default
     page: typeof import('./page').default

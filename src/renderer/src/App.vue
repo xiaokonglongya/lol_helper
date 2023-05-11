@@ -6,7 +6,11 @@
 <script setup lang="ts">
 import { NMessageProvider } from 'naive-ui'
 </script>
-
+<style>
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+</style>
 <style lang="less">
 #app {
   //   font-family: 'use-font';

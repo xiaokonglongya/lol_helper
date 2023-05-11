@@ -20,7 +20,9 @@ import {
   NPagination,
   NSpin,
   NP,
-  NText
+  NText,
+  NTooltip,
+  NPopover
 } from 'naive-ui'
 export function injectNaiveui(App: App<Element>): App<Element> {
   const naive = create({
@@ -44,7 +46,9 @@ export function injectNaiveui(App: App<Element>): App<Element> {
       NPagination,
       NSpin,
       NP,
-      NText
+      NText,
+      NTooltip,
+      NPopover
     ]
   })
   return App.use(naive)

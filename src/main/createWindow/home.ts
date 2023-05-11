@@ -50,7 +50,7 @@ export async function createMainWindow(): Promise<BrowserWindow> {
 
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
     await main.loadURL(process.env['ELECTRON_RENDERER_URL'])
-    main.webContents.openDevTools()
+    // main.webContents.openDevTools()
   } else {
     await main.loadFile(join(__dirname, '../renderer/index.html'))
   }
