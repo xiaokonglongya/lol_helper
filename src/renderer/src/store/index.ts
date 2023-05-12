@@ -57,12 +57,33 @@ export interface Equipment {
   description: string
 }
 
+export interface Rune {
+  id: number
+  key: string
+  icon: string
+  name: string
+  slots: [
+    {
+      runes: [
+        {
+          id: number
+          key: string
+          icon: string
+          name: string
+          shortDesc: string
+          longDesc: string
+        }
+      ]
+    }
+  ]
+}
 const version = '13.9.1'
 const language = 'zh_CN'
 export const riotSotre = defineStore('opgg-stroe', () => {
   const heros = ref<Hero[]>([])
   const summoner = ref<Summoner[]>([])
   const equipments = ref<{ [key: number]: Equipment }>({})
+  const runes = ref<Rune[]>()
   /**所有的英雄 */
   const getHeros = async (): Promise<void> => {
     const result = await axios(
@@ -83,11 +104,18 @@ export const riotSotre = defineStore('opgg-stroe', () => {
     equipments.value = result?.data?.data || {}
     console.log('🚀 ~ file: index.ts:84 ~ getEquipments ~   equipments.value:', equipments.value)
   }
+  const getRunes = async (): Promise<void> => {
+    const result = await axios(
+      `https://ddragon.leagueoflegends.com/cdn/${version}/data/${language}/runesReforged.json`
+    )
+    runes.value = result?.data || []
+  }
 
   const initRiotData = async (): Promise<void> => {
     await getHeros()
     await getSummoner()
     await getEquipments()
+    await getRunes()
   }
 
   /**获取英雄头像 */
@@ -114,7 +142,6 @@ export const riotSotre = defineStore('opgg-stroe', () => {
    * @param id
    * @returns
    * @description https://ddragon.leagueoflegends.com/cdn/11.16.1/img/item/1001.png
-   * @description https://ddragon.leagueoflegends.com/cdn/11.16.1/img/item/1001.png
    */
   const getEquipmentIcon = (id: number): { icon_src: string } & Equipment => {
     const _equipment = equipments.value[id]
@@ -123,6 +150,42 @@ export const riotSotre = defineStore('opgg-stroe', () => {
       icon_src: url,
       ..._equipment
     }
+  }
+
+  /**
+   * 获取符文图标
+   * @param id
+   * @returns
+   * @description https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Domination/Electrocute/Electrocute.png
+   */
+  type ResultRune = { icon_src: string } & Rune['slots'][0]['runes'][0]
+  const getRuneIcon = (id: number): ResultRune | null => {
+    const _allRunes = runes.value
+      ?.map((e) => e.slots)
+      .flat()
+      .map((e) => e.runes)
+      .flat()
+    let _rune: ResultRune | null = null
+    const result = _allRunes?.find((item) => item.id === id)
+    if (result) {
+      _rune = {
+        ...result,
+        icon_src: `https://ddragon.leagueoflegends.com/cdn/img/${result?.icon}`
+      }
+    }
+    return (_rune as ResultRune) || null
+  }
+  const getRuneStyleIcon = (id: number): (Rune & { icon_src: string }) | null => {
+    const _allRunes = runes.value
+    let _rune: (Rune & { icon_src: string }) | null = null
+    const result = _allRunes?.find((item) => item.id === id)
+    if (result) {
+      _rune = {
+        ...result,
+        icon_src: `https://ddragon.leagueoflegends.com/cdn/img/${result?.icon}`
+      }
+    }
+    return _rune || null
   }
 
   const getHeroName = (id: number): string => {
@@ -137,6 +200,8 @@ export const riotSotre = defineStore('opgg-stroe', () => {
     getHeroName,
     getSummonerIcon,
     getEquipmentIcon,
+    getRuneIcon,
+    getRuneStyleIcon,
     initRiotData
   }
 })

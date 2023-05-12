@@ -2,7 +2,7 @@ import { BrowserWindow, shell } from 'electron'
 import { join } from 'path'
 import { is } from '@electron-toolkit/utils'
 
-export async function createMatchWindow(): Promise<BrowserWindow> {
+export async function createGameStartWindow(): Promise<BrowserWindow> {
   const main = new BrowserWindow({
     title: '历史对局',
     width: 860,
@@ -28,11 +28,11 @@ export async function createMatchWindow(): Promise<BrowserWindow> {
   })
 
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-    await main.loadURL(process.env['ELECTRON_RENDERER_URL'] + '/#/match')
+    await main.loadURL(process.env['ELECTRON_RENDERER_URL'] + '/#/gameStart')
     main.webContents.openDevTools()
   } else {
     await main.loadFile(join(__dirname, '../renderer/index.html'), {
-      hash: 'match'
+      hash: 'gameStart'
     })
   }
 

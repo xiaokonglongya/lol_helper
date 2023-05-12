@@ -43,7 +43,6 @@
                     {{ item.kills }}/{{ item.deaths }}/{{ item.assists }}
                   </n-tag>
                 </div>
-
                 <div class="summon">
                   <img :src="item.summon_1" />
                   <img :src="item.summon_2" />
@@ -143,7 +142,7 @@ const setCurrentMatch = (item: MatchList): void => {
 <style scoped lang="less">
 .match {
   display: flex;
-  height: 500px;
+  height: 400px;
   position: relative;
   padding-top: 50px;
   .header {
@@ -174,7 +173,7 @@ const setCurrentMatch = (item: MatchList): void => {
   }
 }
 .match-list {
-  height: 600px;
+  height: 500px;
 }
 .match-list-item {
   padding: 8px 6px 8px 16px;

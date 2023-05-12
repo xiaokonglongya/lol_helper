@@ -87,6 +87,15 @@ export function getUserRankInfo(): Promise<Http1Response> {
     store.get('client_info')
   )
 }
+export function getRankInfoById(puuid: string): Promise<Http1Response> {
+  return createHttp1Request(
+    {
+      method: 'GET',
+      url: `/lol-ranked/v1/ranked-stats/${puuid}`
+    },
+    store.get('client_info')
+  )
+}
 
 /**
  *  获取当前角色对局信息
@@ -128,6 +137,32 @@ export function getSummerHonorLevel(): Promise<Http1Response> {
     {
       method: 'GET',
       url: `/lol-honor-v2/v1/profile`
+    },
+    store.get('client_info')
+  )
+}
+/**
+ * 获取当前游戏内聊天组召唤师
+ */
+export function getGameSummoner(): Promise<Http1Response> {
+  return createHttp1Request(
+    {
+      method: 'GET',
+      url: `/lol-chat/v1/conversations`
+    },
+    store.get('client_info')
+  )
+}
+/**
+ * 获取游戏内聊天组消息
+ * @param conversationID
+ * @returns
+ */
+export function getGameChatMessage(conversationID: string): Promise<Http1Response> {
+  return createHttp1Request(
+    {
+      method: 'GET',
+      url: `lol-chat/v1/conversations/${conversationID}/messages`
     },
     store.get('client_info')
   )

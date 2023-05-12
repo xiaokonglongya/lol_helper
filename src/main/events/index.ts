@@ -42,3 +42,12 @@ export function eventManager(main: BrowserWindow): void {
     windowMaps.get(name)?.minimize()
   })
 }
+export function getAllWindow(): Map<string, BrowserWindow> {
+  return windowMaps
+}
+export function getWindow(name: string): BrowserWindow | undefined {
+  return windowMaps.get(name)
+}
+export function setWindow(name: string, window: BrowserWindow): void {
+  windowMaps.set(name, window)
+}

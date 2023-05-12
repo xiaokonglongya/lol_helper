@@ -99,11 +99,6 @@ const tabs = ref([
   }
 ])
 const formatData = (data): void => {
-  console.log(data)
-  console.log(
-    '🚀 ~ file: rank.vue:88 ~ formatData ~ data:',
-    data.map((e) => e.queueType)
-  )
   tabs.value.forEach((item) => {
     const _item = data.find((i) => i.queueType === item.key)
 

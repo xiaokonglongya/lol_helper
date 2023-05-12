@@ -380,10 +380,13 @@ export interface SummerDetails {
         sightWardsBoughtInGame: number
         teamEarlySurrendered: boolean
         timeCCingOthers: number
+        /**伤害总额 */
         totalDamageDealt: number
         totalDamageDealtToChampions: number
+        /**承受伤害 */
         totalDamageTaken: number
         totalHeal: number
+        /**击杀野怪和小兵总数 */
         totalMinionsKilled: number
         totalPlayerScore: number
         totalScoreRank: number
@@ -439,4 +442,117 @@ export interface SummerHonorLevel {
   checkpoint: number
   honorLevel: number
   rewardsLocked: boolean
+}
+
+export type Tier =
+  | 'NONE'
+  | 'NA'
+  | 'IRON'
+  | 'BRONZE'
+  | 'SILVER'
+  | 'GOLD'
+  | 'PLATINUM'
+  | 'DIAMOND'
+  | 'MASTER'
+  | 'GRANDMASTER'
+  | 'CHALLENGER'
+export type Division = 'I' | 'II' | 'III' | 'IV'
+export type QueueType =
+  | 'RANKED_SOLO_5x5'
+  | 'RANKED_FLEX_SR'
+  | 'RANKED_FLEX_TT'
+  | 'NORMAL'
+  | 'ARAM_UNRANKED_5x5'
+interface Rank {
+  division: Division
+  highestDivision: Division
+  highestTier: Tier
+  isProvisional: boolean
+  leaguePoints: number
+  losses: number
+  miniSeriesProgress: ''
+  previousSeasonAchievedDivision: 'NA'
+  previousSeasonAchievedTier: 'NONE'
+  previousSeasonEndDivision: 'NA'
+  previousSeasonEndTier: 'NONE'
+  provisionalGameThreshold: number
+  provisionalGamesRemaining: number
+  queueType: QueueType
+  ratedRating: number
+  ratedTier: 'NONE'
+  tier: Tier
+  warnings: null
+  wins: number
+}
+interface Seasons {
+  currentSeasonEnd: number
+  currentSeasonId: number
+  nextSeasonStart: number
+}
+
+export interface RankedInfo {
+  earnedRegaliaRewardIds: []
+  highestCurrentSeasonReachedTierSR: Tier
+  highestPreviousSeasonAchievedDivision: 'NA'
+  highestPreviousSeasonAchievedTier: 'NONE'
+  highestPreviousSeasonEndDivision: 'NA'
+  highestPreviousSeasonEndTier: 'NONE'
+  highestRankedEntry: Rank
+  highestRankedEntrySR: Rank
+  queueMap: {
+    RANKED_FLEX_SR: Rank
+    RANKED_SOLO_5x5: Rank
+    RANKED_TFT: Rank
+    RANKED_TFT_DOUBLE_UP: Rank
+    RANKED_TFT_PAIRS: Rank
+    RANKED_TFT_TURBO: Rank
+  }
+  queues: Rank[]
+  rankedRegaliaLevel: number
+  seasons: {
+    RANKED_FLEX_SR: Seasons
+    RANKED_SOLO_5x5: Seasons
+    RANKED_TFT: Seasons
+    RANKED_TFT_DOUBLE_UP: Seasons
+    RANKED_TFT_PAIRS: Seasons
+    RANKED_TFT_TURBO: Seasons
+  }
+  splitsProgress: {
+    '1': number
+  }
+}
+
+export interface GameChat {
+  gameName: string
+  gameTag: string
+  id: string
+  inviterId: string
+  isMuted: true
+  lastMessage: {
+    body: string
+    fromId: string
+    fromPid: string
+    fromSummonerId: 0
+    id: string
+    isHistorical: true
+    timestamp: string
+    type: string
+  }
+  name: string
+  password: string
+  pid: string
+  targetRegion: string
+  type: string
+  unreadMessageCount: 0
+}
+
+export interface ChatMessage {
+  body: string
+  fromId: string
+  fromPid: string
+  fromSummonerId: number
+  id: string
+  isHistorical: true
+  timestamp: string
+  type: string
 }

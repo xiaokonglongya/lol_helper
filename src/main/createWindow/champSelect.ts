@@ -1,11 +1,11 @@
-import { BrowserWindow, shell } from 'electron'
+import { BrowserWindow, shell, screen } from 'electron'
 import { join } from 'path'
 import { is } from '@electron-toolkit/utils'
 
-export async function createMatchWindow(): Promise<BrowserWindow> {
+export async function createChampSelectWindow(): Promise<BrowserWindow> {
   const main = new BrowserWindow({
-    title: '历史对局',
-    width: 860,
+    title: '当前对局',
+    width: 300,
     height: 570,
     // alwaysOnTop: true,
     show: false,
@@ -19,6 +19,11 @@ export async function createMatchWindow(): Promise<BrowserWindow> {
     }
   })
   main.on('ready-to-show', () => {
+    const { left, top } = {
+      left: screen.getPrimaryDisplay().workAreaSize.width - 460,
+      top: screen.getPrimaryDisplay().workAreaSize.height - 760
+    }
+    main.setPosition(left, top)
     main.show()
   })
 
@@ -28,11 +33,11 @@ export async function createMatchWindow(): Promise<BrowserWindow> {
   })
 
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-    await main.loadURL(process.env['ELECTRON_RENDERER_URL'] + '/#/match')
+    await main.loadURL(process.env['ELECTRON_RENDERER_URL'] + '/#/champSelect')
     main.webContents.openDevTools()
   } else {
     await main.loadFile(join(__dirname, '../renderer/index.html'), {
-      hash: 'match'
+      hash: 'champSelect'
     })
   }
 
